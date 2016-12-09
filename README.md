@@ -8,6 +8,14 @@ SimpleSubscriber<Map> simpleSubscriber = new SimpleSubscriber<>();//生成一个
 huanxinApiService.register(new HuanxinRegisterDto(uid.toString(), password)).subscribe(simpleSubscriber);
 return !simpleSubscriber.getResponse().containsKey("error");//如果返回的map中有error字段证明调用接口出错
 ```
+`SimpleSubscriber<T>`可以返回任意值，例如
+```
+SimpleSubscriber<String> stringSimpleSubscriber = new SimpleSubscriber<>();
+HuanxinApiServiceProvider.Builder.createService(HuanxinApiService.class).getUserRx(uid).subscribe(stringSimpleSubscriber);
+return stringSimpleSubscriber.getResponse();
+```
+或者是一个自定义值，非常方便
+
 ## 代码阅读
 所有的集成工作都在retrofit这个包中，重点看`HuanxinApiServiceProvider`这个类主要是采用动态代理为生成的所有可订阅者设置一个retryWhen,本次所解决的
 全局token刷新就是在这个基础上进行的。
