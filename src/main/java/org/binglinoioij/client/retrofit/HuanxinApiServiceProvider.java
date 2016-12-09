@@ -86,6 +86,7 @@ public class HuanxinApiServiceProvider implements InvocationHandler {
         if (error instanceof HttpException) {
             HttpException ex = (HttpException) error;
             if (HttpStatus.UNAUTHORIZED.value() == ex.code()) {
+                //token 失效，去刷新token
                 return updateToken(ex);
             }
             if (HttpStatus.TOO_MANY_REQUESTS.value() == ex.code()) {
@@ -98,6 +99,7 @@ public class HuanxinApiServiceProvider implements InvocationHandler {
                 return Observable.just(null);
             }
         }
+        //其他错误暂时没有处理，可以在这里扩展
         return Observable.error(error);
     }
 
